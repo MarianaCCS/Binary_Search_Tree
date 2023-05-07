@@ -15,6 +15,7 @@ int main(){
     arbol.insert(11);
     cout<<"InOrder: ";arbol.displayInOrder();
 
+    
     arbol.remove(5);
     
     

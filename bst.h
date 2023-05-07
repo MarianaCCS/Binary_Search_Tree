@@ -1,23 +1,7 @@
-#include <iostream>
+#include "node.h"
 #include <stack>
 using namespace std;
 
-template <class T>
-struct Node{
-    Node<T>* left;
-    Node<T>* right;
-    T data;
-
-    Node():left(nullptr),right(nullptr){}
-    Node(T _data):left(nullptr),right(nullptr),data(_data){}
-
-    void killSelf(){
-        if (left) left = nullptr;
-        if (right) right = nullptr;
-    }
-
-    ~Node(){}
-};
 
 template <class T>
 class BSTree{ // Binary Search Tree
@@ -168,6 +152,7 @@ class BSTree{ // Binary Search Tree
                 return pila.top();
             }
         }
+        return T();
     }
 
     T predecesor(T _data){
@@ -199,10 +184,11 @@ class BSTree{ // Binary Search Tree
                 return pila.top();
             }
         }
+        return T();
     }
 
     void size_rec(Node<T>*& nodo,int& len){
-        if (!nodo){}
+        if (!nodo){return;}
         else{
             size_rec(nodo->left, len);
             size_rec(nodo->right, len);
@@ -225,6 +211,7 @@ class BSTree{ // Binary Search Tree
     }
 
     int altura(){
+        if (!root) return -1;
         return altura_rec(root);
     }
 
@@ -245,13 +232,12 @@ class BSTree{ // Binary Search Tree
 
     void clear(){
         root->killSelf();
-        delete root;
-        root = nullptr;
+        root = nullptr; 
     }
     
     void displayBFS(){ // recorrido en profundidad (inorder)
         inorder_rec(root);
     }
 
-    ~BSTree(){ root->killSelf(); }
+    ~BSTree(){ clear(); }
 };  
