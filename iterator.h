@@ -3,7 +3,7 @@
 
 #include "node.h"
 #include <stack>
-#include <queue>
+
 template <typename T>
 class BSTIterator
 {
@@ -15,19 +15,16 @@ public:
 private:
     Node<T> *current;
     Type type;
-    stack <Node<T>*> pila;
-    queue <Node<T>*> cola;
+    stack <Node<T>*> pila; // los primeros en entrar son los ultimos en salir
 
 public:
     BSTIterator() : current(nullptr), type(InOrder) {}
-    BSTIterator(Node<T>* &current, Type type=InOrder): type(type) {
+    BSTIterator(Node<T>* &current, Type type=InOrder): type(type) { 
+        // necesito que current sea el elemento con el que inicia el iterador 
+        // *pila*: debe tener los demás elementos que ayudará al recorrido (no volveré a tener acceso a la raiz del arbol)
+
         if (type==PreOrder){ // root - left - right  // FIFO (primero saco la raiz)
-            Node<T>* temp = current;
-            while (current->left && current){
-                cola.push(temp); //guarda nodos: desde la raiz al minimo
-                temp = current->left;
-            }
-            this->current = cola.pop(); // listo para el recorrido
+            this->current = current; // listo para el recorrido
         }
         else if(type==InOrder){  // left - root - right // FILO (saco la izq primero)
             Node<T>* temp = current;
@@ -37,8 +34,13 @@ public:
             }
             this->current = temp; // current está listo para iniciar el recorrido
         }
-        else{
-
+        else if(type==PostOrder){ // left - right - root
+            Node<T>* temp = current;
+            while (temp->left){
+                pila.push(temp); //guarda nodos: desde la raiz al minimo
+                temp = temp->left;
+            }
+            this->current = temp; // current está listo para iniciar el recorrido
         }
     }
 
@@ -55,14 +57,33 @@ public:
 
 
     void next_pre_order(){ // root - left -right
+        /*
+            1. Tengo la rama
+            2. Si existe, guardo la izquierda.
+            3. Si existe, guardo la derecha 
+            (Iterativo)
+        */
+        if (pila.empty() && !current->left && !current->right) {current=nullptr; return;} 
+
         // notar que para estar aquí, ya tengo al padre
-        if(current->left) current = current->left;
-        else if (current->right) current = current->right;
-        else if (!cola.empty()) current = cola.front();
-        cola.pop(); // siempre  quito al padre
+        if (current->right){
+            pila.push(current->right);
+        }
+
+        if(current->left){ // debo asegurarme de poder acceder a la rama
+            pila.push(current->left);
+        } 
+        current = pila.top(); //current es root
+        pila.pop();
     }    
     
     void next_in_order(){ // left - root - right
+        /* 
+            1. Guarda toda la izquierda (left)
+            2. Hace pop (del top)
+            3. Verifica si el elemento que quitó tiene derecha:
+                - Si la tiene, guarda nodo->right y toda su rama izquierda (iterativo). 
+        */
         if (pila.empty() && !current->right) {
             current=nullptr;  return; // caso en el que se recorre todo 
         }
@@ -78,7 +99,26 @@ public:
         }      
     }
 
-    void next_post_order(){
+    void next_post_order(){ // left - right - root
+        /*
+            1. Guardo la rama
+            2. Si tiene derecha, la guardo
+            3. Si tiene izquierda, la guardo
+        */
+        if (pila.empty() && !current->left && !current->right){current = nullptr; return;}
+        
+        Node<T>* temp = pila.top();
+
+        if(temp->right){
+            pila.push(temp->right);
+        }
+
+        if (temp->left){
+            pila.push(temp->left);
+        }
+
+        current = pila.top();
+        pila.pop();
 
     }
 

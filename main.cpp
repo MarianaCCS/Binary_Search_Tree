@@ -61,22 +61,21 @@ void test_iterators(){
     } 
     cout<<"Iterator InOrder: "<<result<<endl; //result == "8 3 1 6 4 7 10 14 13 "
 
-    /*
-    string result = "";
-    BSTree<int>::iterator ite = bstree->begin(BSTIterator<int>::Type::PreOrder);
-    while(ite != bstree->end()) {
-        result += std::to_string(*ite) + " ";
-        ++ite;
+    result = "";
+    BSTree<int>::iterator ite1 = bstree->begin(BSTIterator<int>::Type::PreOrder);
+    while(ite1 != bstree->end()) {
+        result += std::to_string(*ite1) + " ";
+        ++ite1;
     }
-    cout<<result; //result == "8 3 1 6 4 7 10 14 13 "
+    cout<<"Iterator PreOrder: "<<result; //result == "8 3 1 6 4 7 10 14 13 "
     
     result = "";
-    ite = bstree->begin(BSTIterator<int>::Type::PostOrder);
-    while(ite != bstree->end()) {
-        result += std::to_string(*ite) + " ";
-        ++ite;
+    BSTree<int>::iterator ite2 = bstree->begin(BSTIterator<int>::Type::PostOrder);
+    while(ite2 != bstree->end()) {
+        result += std::to_string(*ite2) + " ";
+        ++ite2;
     }
-    */
+    cout<<"Iterator PostOrder: "<<result; //result == "8 3 1 6 4 7 10 14 13 "
     //result == "1 4 7 6 3 13 14 10 8 "
 
 }
