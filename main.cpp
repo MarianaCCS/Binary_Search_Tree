@@ -1,6 +1,7 @@
 #include "bst.h"
 
-int main(){
+
+void test_bst(){
     BSTree<int> arbol;
 
     arbol.insert(5);
@@ -37,6 +38,50 @@ int main(){
     cout<<"Altura: "<<arbol.altura()<<endl;
 
     arbol.clear();
-    cout<<"Size: "<<arbol.size()<<endl;
+    cout<<"Size: "<<arbol.size()<<endl; 
+}
+
+void test_iterators(){
+    BSTree<int>* bstree = new BSTree<int>();
+    bstree->insert(8);
+    bstree->insert(3);
+    bstree->insert(1);
+    bstree->insert(6);
+    bstree->insert(4);
+    bstree->insert(7);
+    bstree->insert(10);
+    bstree->insert(14);
+    bstree->insert(13);
+
+    string result = "";
+    BSTree<int>::iterator ite = bstree->begin(BSTIterator<int>::Type::InOrder);
+    while(ite != bstree->end()) {
+        result += std::to_string(*ite) + " ";
+        ++ite;
+    } 
+    cout<<"Iterator InOrder: "<<result<<endl; //result == "8 3 1 6 4 7 10 14 13 "
+
+    /*
+    string result = "";
+    BSTree<int>::iterator ite = bstree->begin(BSTIterator<int>::Type::PreOrder);
+    while(ite != bstree->end()) {
+        result += std::to_string(*ite) + " ";
+        ++ite;
+    }
+    cout<<result; //result == "8 3 1 6 4 7 10 14 13 "
+    
+    result = "";
+    ite = bstree->begin(BSTIterator<int>::Type::PostOrder);
+    while(ite != bstree->end()) {
+        result += std::to_string(*ite) + " ";
+        ++ite;
+    }
+    */
+    //result == "1 4 7 6 3 13 14 10 8 "
+
+}
+
+int main(){
+    test_iterators();
     return 0;
 }

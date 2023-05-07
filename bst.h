@@ -1,13 +1,11 @@
-#include "node.h"
-#include <stack>
-using namespace std;
-
+#include "iterator.h"
 
 template <class T>
 class BSTree{ // Binary Search Tree
     Node<T>* root;
 
     public:
+    typedef BSTIterator<T> iterator;
     BSTree():root(nullptr){}
 
 
@@ -237,6 +235,15 @@ class BSTree{ // Binary Search Tree
     
     void displayBFS(){ // recorrido en profundidad (inorder)
         inorder_rec(root);
+    }
+
+    iterator begin(typename BSTIterator<T>::Type type){ //begin
+        return iterator(root,type);
+        
+    }
+
+    iterator end(){
+        return iterator();
     }
 
     ~BSTree(){ clear(); }

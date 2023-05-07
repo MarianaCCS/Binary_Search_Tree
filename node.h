@@ -22,5 +22,6 @@ struct Node{
         delete this;
     }
 
+
     ~Node(){ }
 };
