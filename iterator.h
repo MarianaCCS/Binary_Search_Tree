@@ -34,13 +34,20 @@ public:
             }
             this->current = temp; // current está listo para iniciar el recorrido
         }
-        else if(type==PostOrder){ // left - right - root
-            Node<T>* temp = current;
-            while (temp->left){
-                pila.push(temp); //guarda nodos: desde la raiz al minimo
-                temp = temp->left;
+        else if(type==PostOrder){ // left - right - root (cuando usamos dos pilas, lo vemos al revés)
+            stack <Node<T>*> pila2; // servirá para agrupar elems más rápido
+            pila2.push(current); // agregamos la raiz
+
+            while (!pila2.empty()){ // mientras que no esté vacía
+                Node<T>* temp = pila2.top();  pila2.pop(); // quitamos 1er elem
+
+                pila.push(temp); // añadimos la raiz a la pila resultante
+        
+                if (temp->left) pila2.push(temp->left);  // añadimos izquierda
+                if (temp->right) pila2.push(temp->right); // añadimos derecha
             }
-            this->current = temp; // current está listo para iniciar el recorrido
+            this->current = pila.top(); // current está listo para el recorrido
+            pila.pop();
         }
     }
 
@@ -99,28 +106,16 @@ public:
         }      
     }
 
-    void next_post_order(){ // left - right - root
-        /*
-            1. Guardo la rama
-            2. Si tiene derecha, la guardo
-            3. Si tiene izquierda, la guardo
-        */
-        if (pila.empty() && !current->left && !current->right){current = nullptr; return;}
+    void next_post_order(){
+        if (pila.empty()) {current=nullptr; return;}
         
-        Node<T>* temp = pila.top();
-
-        if(temp->right){
-            pila.push(temp->right);
-        }
-
-        if (temp->left){
-            pila.push(temp->left);
-        }
-
         current = pila.top();
         pila.pop();
-
+           
     }
+
+    
+    
 
     BSTIterator<T>& operator++(){   //++it
         if (type==PreOrder) next_pre_order();
